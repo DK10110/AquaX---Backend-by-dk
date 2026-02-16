@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router(); 
 const http = require("http");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -9,25 +10,34 @@ require("./config/db");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: { origin: "*" },
-});
+const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(cors());
 app.use(express.json());
-
 app.set("io", io); // make socket available globally
 
-// Routes
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/metrics", require("./routes/metricRoutes"));
-app.use("/api/alerts", require("./routes/alertRoutes"));
-app.use("/api/devices", require("./routes/deviceRoutes"));
-app.use("/api/advanced", require("./routes/advancedRoutes"));
+// Import routes
+const authRoutes = require("./routes/authRoutes");
+const metricRoutes = require("./routes/metricRoutes");
+const alertRoutes = require("./routes/alertRoutes");
+const deviceRoutes = require("./routes/deviceRoutes");
+const sensorRoutes = require("./routes/sensorRoutes");
+const advancedRoutes = require("./routes/advancedRoutes");
 
+// Use routes
+app.use("/api/auth", authRoutes);
+app.use("/api/metrics", metricRoutes);
+app.use("/api/alerts", alertRoutes);
+app.use("/api/devices", deviceRoutes);
+app.use("/api/sensors", sensorRoutes);
+app.use("/api/advanced", advancedRoutes);
+
+// Test WebSocket connection
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+module.exports = router;

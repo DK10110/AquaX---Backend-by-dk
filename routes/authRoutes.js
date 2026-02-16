@@ -41,5 +41,26 @@ router.post("/login", async (req, res) => {
   });
 });
 
+// POST /api/auth/register → for registering a new user
+
+// POST /api/auth/login → for logging in
+
+// GET /api/auth/profile → get your own user info(view profile)
+
+// PUT /api/auth/profile → update your profile info
+
+const { protect } = require("../middleware/authMiddleware");
+
+router.get("/profile", protect, async (req, res) => {
+  const user = await User.findById(req.user.id).select("-password");
+  res.json(user);
+});
+
+router.put("/profile", protect, async (req, res) => {
+  const user = await User.findById(req.user.id);
+  user.name = req.body.name || user.name;
+  await user.save();
+  res.json(user);
+});
 
 module.exports = router;
