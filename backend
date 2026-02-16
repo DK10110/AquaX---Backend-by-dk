@@ -1,0 +1,19 @@
+backend/
+│
+├── server.js
+├── config/
+│   └── db.js
+├── middleware/
+│   └── authMiddleware.js
+├── models/
+│   ├── User.js
+│   ├── Device.js
+│   ├── Sensor.js
+│   ├── Metric.js
+│   └── Alert.js
+├── routes/
+│   ├── authRoutes.js
+│   ├── metricRoutes.js
+│   ├── alertRoutes.js
+│   ├── deviceRoutes.js
+│   └── advancedRoutes.js
